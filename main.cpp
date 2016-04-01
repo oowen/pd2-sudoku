@@ -4,11 +4,10 @@
 using namespace std;
 int main(){
 	Sudoku ss;
-
 	ss.giveQuestion();
-	ss.solve();
+//	ss.readIn();
 	ss.printOut();
-
+	ss.solve();
 //	ss.transform();
 //	ss.printOut();
 //	cout<<endl;

@@ -4,17 +4,11 @@
 #include<cstdlib>
 #include"Sudoku.h"
 using namespace std;
-	int map[9][9] = {{5,3,0,0,7,0,0,0,0},
-			 		 {6,0,0,1,9,5,0,0,0},
-			 		 {0,9,8,0,0,0,0,6,0},
-					 {8,0,0,0,6,0,0,0,3},
-					 {4,0,0,8,0,3,0,0,1},
-					 {7,0,0,0,2,0,0,0,6},
-					 {0,6,0,0,0,0,2,8,0},
-					 {0,0,0,4,1,9,0,0,5},
-					 {0,0,0,0,8,0,0,7,9}};
+	int map[9][9];
 	int tempnum[81];                              //last input 
-	int tempx=0;   									//last input location
+	int tempnum1[81];
+	int tempx=0;	//last input location
+	int tempy=80;
 	int startrow[81];
 	int startcol[81];
 	int startblock[81];
@@ -22,76 +16,144 @@ using namespace std;
 	int addcol[9];
 	int addblock[9];
 	int ss[81];
-
+	int ss0[81];
+	int ss1[81];
+	int ss2[81];
+	int ss3[81];
+	int ss4[81];
+	int ss5[81];
+	int N=0;
 	void Sudoku::solve(){
 		exchange();
+		for(i=0;i<81;i++){
+			ss1[i]=ss[i];
+			ss0[i]=ss[i];
+			ss4[80-i]=ss[i];}
+//		for(i=0;i<81;i++)
+//			cout<<ss[i];
+//			cout<<endl;
+//		for(i=0;i<81;i++)	
+//			cout<<ss4[i];
+//			cout<<endl;
+			exam();
 		init();
 		tryans();
+		for(i=0;i<81;i++)
+			ss[i]=ss2[i];
 		exchange1();
+		printOut();
 	}
 
-/*
-	bool Sukoku::checkUnity(int arr[]){
-		int arr_unity[9]={0};
-		for(i=0;i<9;i++)
-			++arr_unity[arr[i]-1];
-		for(i=0;i<9;i++)
-			if(arr_unity[i]!=1)
-				return false;
-	}
-	bool Sudoku::isCorrect(){
-		bool check_result;
-		int check_arr[9];
-		int location;
-		for(i=0;i<81;i+=9){
-			for(j=0;j<9;j++)
-				check_arr[j]=map[i+j];
-	}
-	bool Sudoku::examrow(int b[]){	
-	}
-	void Sudoku::findzero(){
-		exchange();
-		for(i=0;i<81;i++)
-			if(ss[i]==0){
-				do{ss[i]=ss[i]=+1;
-				}while(exam(ss[i])==false;}
-	}
-*/
+	void Sudoku::exam(){
+		for(int k=0;k<9;k++){
+			for(i=0;i<9;i++){
+				for(j=0;j<9;j++){
+					if((ss[9*k+i]==ss[9*k+j]&&ss[9*k+i]!=0)&&(9*k+i)!=(9*k+j)){
+						cout<<"0"<<endl;
+						exit(1);}
+					if((ss[k+9*i]==ss[k+9*j]&&ss[k+9*i]!=0)&&(k+9*i)!=(k+9*j)){
+						cout<<"0"<<endl;
+						exit(1);}
+					if(ss[27*(k/3)+3*(k%3)+9*(i/3)+(i%3)]==ss[27*(k/3)+3*(k%3)+9*(j/3)+(j%3)]&&ss[27*(k/3)+3*(k%3)+9*(i/3)+(i%3)]!=0){
+						if((27*(k/3)+3*(k%3)+9*(i/3)+(i%3))!=(27*(k/3)+3*(k%3)+9*(j/3)+(j%3))){
+						cout<<"0"<<endl;
+						exit(1);}
+						}
+					}
+				}
+			}
+		}
+		
+
 	void Sudoku::init(){
 		for(i=0;i<81;i++){
 			startrow[i]=i/9*9;
 			startcol[i]=i%9;
-			startblock[i]=((i/9)/3*27+((i%9)/3)*3);}
+			startblock[i]=((i/9)/3)*27+((i%9)/3)*3;}
 		for(i=0;i<9;i++){
 			addrow[i]=i;
 			addcol[i]=i*9;
-			addblock[i]=(i*3)*9+(i%3);}
+			addblock[i]=(i/3)*9+(i%3);}
 	}
 	void Sudoku::tryans(){
 		int x=getzero(-1);
 		do{
 			ss[x]++;
 			if(ss[x]>9){
-			ss[x]=0;
-			x=beforesite();
-			}else{
-			if(check(x)==0){
-				pointpush(x);
-				x=getzero(x);}
+				ss[x]=0;
+				x=beforesite();}
+			else{
+				if(check(x)==0){
+					pointpush(x);
+					x=getzero(x);
+					if(x==81){
+						for(i=0;i<81;i++)
+							ss2[i]=ss[i];
+					}
+				}
 			}
-		}while(x>0&&x<81);
-	}
+		}while(x>=0&&x<81);
+
+		int y=getzero1(-1);
+		do{
+			ss4[y]++;
+			if(ss4[y]>9){
+				ss4[y]=0;
+				y=beforesite();}
+			else{
+				if(checkk(y)==0){
+					pointpush(y);
+					y=getzero1(y);
+					if(x==81){
+						for(i=0;i<81;i++)
+							ss3[i]=ss4[80-i];
+					}
+				}
+			}
+		}while(y>=0&&y<81);
+		for(i=0;i<81;i++){
+			if(ss2[i]==ss3[i])
+				N++;}
+//				for(i=0;i<81;i++)
+//					cout<<ss2[i];
+//					cout<<endl;
+//				for(i=0;i<81;i++)
+//					cout<<ss4[i];
+//					cout<<endl;	
+//				for(i=0;i<81;i++)
+//					cout<<ss3[i];
+//					cout<<endl;
+		if(N!=81){
+			cout<<"2"<<endl;
+			exit(1);}
+		else if(N==81)
+			cout<<"1"<<endl;
+	}	
 
 	int Sudoku::check(int x){	//check row col block
 		int y=0;
-		if(!y){
-			y=check1(x,startrow[x],addrow);
-			y=check1(x,startcol[x],addcol);
-			y=check1(x,startblock[x],addblock);
+		if(!y) y=check1(x,startrow[x],addrow);
+		if(!y) y=check1(x,startcol[x],addcol);
+		if(!y) y=check1(x,startblock[x],addblock);	
+		return y;
+	}
+	int Sudoku::checkk(int x){
+		int y=0;
+		if(!y) y=check2(x,startrow[x],addrow);
+		if(!y) y=check2(x,startcol[x],addcol);
+		if(!y) y=check2(x,startblock[x],addblock);
+		return y;
+	}
+		
+	int Sudoku::check2(int x,int start,int *addnum){
+		int y=0,z;
+		for(i=0;i<9;i++){
+			z=start+addnum[i];
+			if(x!=z&&ss4[x]==ss4[z])
+				y++;
 		}
 		return y;
 	}
-
 	int Sudoku::check1(int x,int start,int *addnum){
 		int y=0,z;
 		for(i=0;i<9;i++){
@@ -101,14 +163,23 @@ using namespace std;
 		}
 		return y;
 	}
-
-		
+	int Sudoku::getzero1(int x){
+		do{
+			x++;
+		}while(x<81&&ss4[x]>0);	
+		return x;
+	}
 	int Sudoku::getzero(int x){
 		do{
 			x++;
 			}while(x<81&&ss[x]>0);
 		return x;
-			}
+	}
+	int Sudoku::aftersite(){
+		if(tempy>=80)
+			return(81);
+		else return(tempnum1[++tempy]);
+		}
 	int Sudoku::beforesite(){
 		if(tempx<=0)
 			return(-1);
@@ -117,21 +188,36 @@ using namespace std;
 	int Sudoku::pointpush(int x){
 		tempnum[tempx++]=x;
 	}
+	int Sudoku::pointpull(int x){
+		tempnum1[tempy--]=x;
+	}
 //////////////////////////////////////////////////////////////////////////////////
 	void Sudoku::giveQuestion(){
+		int mmm[9][9]={{5,3,0,0,7,0,0,0,0},
+			  	   {6,0,0,1,9,5,0,0,0},
+			   	   {0,9,8,0,0,0,0,6,0},
+				   {8,0,0,0,6,0,0,0,3},
+				   {4,0,0,8,0,3,0,0,1},
+				   {7,0,0,0,2,0,0,0,6},
+				   {0,6,0,0,0,0,2,8,0},
+				   {0,0,0,4,1,9,0,0,5},
+				   {0,0,0,0,8,0,0,7,9}};
 		for(i=0;i<9;i++){
 			for(j=0;j<9;j++)
-				map[i][j]=map[i][j];
-			}
+				map[i][j]=mmm[i][j];
 		}
+	}
 	void Sudoku::readIn(){
+			
 			for(i=0;i<9;i++){
 				for(j=0;j<9;j++)
-					map[i][j]=0;
-			}
-			cin>>map[9][9];
+					cin>>map[i][j];}
+//			for(i=0;i<9;i++){
+//				for(j=0;j<9;j++)
+//					cout<<map[i][j];}			
+//					cout<<endl;
+//			}
 		}
-
 	void Sudoku::changeNum(int a,int b){
 		if( a < 1 || a > 9){
 			cout<<"input error"<<endl;
@@ -139,8 +225,6 @@ using namespace std;
 		else if ( b < 1 || b > 9){
 			cout<<"input error"<<endl;
 			exit(1);}
-
-
 		for(i=0;i<9;i++){
 			for(j=0;j<9;j++){
 				if(map[i][j]==a)
@@ -310,7 +394,6 @@ using namespace std;
 	}
 
 	void Sudoku::exchange(){
-		int ss[81]={0};
 		for(i=0;i<9;i++){
 			for(j=0;j<9;j++)
 				ss[i*9+j]=map[i][j];
