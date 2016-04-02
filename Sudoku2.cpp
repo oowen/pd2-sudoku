@@ -8,7 +8,7 @@ using namespace std;
 	int tempnum[81];                              //last input 
 	int tempnum1[81];
 	int tempx=0;	//last input location
-	int tempy=0;
+	int tempy=80;
 	int startrow[81];
 	int startcol[81];
 	int startblock[81];
@@ -17,29 +17,21 @@ using namespace std;
 	int addblock[9];
 	int ss[81];
 	int ss0[81];
-	int ss1[81]={0};
-	int ss2[81]={0};
-	int ss3[81]={0};
+	int ss1[81];
+	int ss2[81];
+	int ss3[81];
 	int ss4[81];
 	int ss5[81];
-	int t=0;
 	int N=0;
-	int P=0;
-
 	void Sudoku::solve(){
 		exchange();
 		for(i=0;i<81;i++){
 			ss1[i]=ss[i];
-			ss4[i]=ss[i];}
-			for(i=0;i<81;i++){
-				if(!ss4[i])
-					ss4[i]=10;}
-				
-			
+			ss0[i]=ss[i];
+			ss4[80-i]=ss[i];}
 //		for(i=0;i<81;i++)
-//			cout<<ss[i]<<" ";
+//			cout<<ss[i];
 //			cout<<endl;
-	
 //		for(i=0;i<81;i++)	
 //			cout<<ss4[i];
 //			cout<<endl;
@@ -67,12 +59,9 @@ using namespace std;
 						cout<<"0"<<endl;
 						exit(1);}
 						}
-					
-
 					}
 				}
 			}
-			
 		}
 		
 
@@ -107,9 +96,9 @@ using namespace std;
 
 		int y=getzero1(-1);
 		do{
-			ss4[y]--;
-			if(ss4[y]<1){
-				ss4[y]=10;
+			ss4[y]++;
+			if(ss4[y]>9){
+				ss4[y]=0;
 				y=beforesite();}
 			else{
 				if(checkk(y)==0){
@@ -117,7 +106,7 @@ using namespace std;
 					y=getzero1(y);
 					if(y==81){
 						for(i=0;i<81;i++)
-							ss3[i]=ss4[i];
+							ss3[i]=ss4[80-i];
 					}
 				}
 			}
@@ -129,16 +118,16 @@ using namespace std;
 //					cout<<ss2[i];
 //					cout<<endl;
 //				for(i=0;i<81;i++)
+//					cout<<ss4[i];
+//					cout<<endl;	
+//				for(i=0;i<81;i++)
 //					cout<<ss3[i];
 //					cout<<endl;
 		if(N!=81){
 			cout<<"2"<<endl;
 			exit(1);}
-		else if(N==81&&ss2[0]!=0)
+		else if(N==81)
 			cout<<"1"<<endl;
-		else{
-			cout<<"0"<<endl;
-			exit(1);}
 	}	
 
 	int Sudoku::check(int x){	//check row col block
@@ -177,7 +166,7 @@ using namespace std;
 	int Sudoku::getzero1(int x){
 		do{
 			x++;
-		}while(x<81&&ss4[x]<10);	
+		}while(x<81&&ss4[x]>0);	
 		return x;
 	}
 	int Sudoku::getzero(int x){
@@ -187,9 +176,9 @@ using namespace std;
 		return x;
 	}
 	int Sudoku::aftersite(){
-		if(tempy<=0)
-			return(-1);
-		else return(tempnum1[--tempy]);
+		if(tempy>=80)
+			return(81);
+		else return(tempnum1[++tempy]);
 		}
 	int Sudoku::beforesite(){
 		if(tempx<=0)
@@ -216,9 +205,7 @@ using namespace std;
 		for(i=0;i<9;i++){
 			for(j=0;j<9;j++)
 				map[i][j]=mmm[i][j];
-				
 		}
-		printOut();
 	}
 	void Sudoku::readIn(){
 			
@@ -247,14 +234,14 @@ using namespace std;
 			}
 		}
 	}
-	
-	void Sudoku::changeRow(int a,int b){
+	void Sudoku::changeRow(int a, int b){
 		if(a<0||a>2){
 			cout<<"input error"<<endl;
 			exit(1);}
-		if(b<0||b>2){
+		else if(b<0||b>2){
 			cout<<"input error"<<endl;
 			exit(1);}
+		
 		if((a==0&&b==1)||(a==1&&b==0)){
 				for(j=0;j<9;j++){
 					int x=map[0][j];
@@ -266,7 +253,8 @@ using namespace std;
 					map[3][j]=x;
 					map[4][j]=y;
 					map[5][j]=z;}
-			}
+		}
+				
 		else if((a==0&&b==2)||(a==2&&b==0)){
 				for(j=0;j<9;j++){
 					int x=map[0][j];
@@ -279,7 +267,6 @@ using namespace std;
 					map[7][j]=y;
 					map[8][j]=z;}
 		}
-	
 		else if((a==1&&b==2)||(a==2&&b==1)){
 				for(j=0;j<9;j++){
 					int x=map[3][j];
@@ -345,18 +332,22 @@ using namespace std;
 		int out[9][9];
 		if(n<0||n>100){
 			cout<<"input error"<<endl;
-			exit(1);
+			exit(1);}
+		if(n==0){
+			for(i=0;i<9;i++){
+				for(j=0;j<9;j++)
+					map[i][j]=map[i][j];}
 		}
 		else 
 			for(int k=0;k<n;k++){
 				for(i=0;i<9;i++){
 					for(j=0;j<9;j++)
 						out[j][8-i]=map[i][j];}
-			
+					
 				for(i=0;i<9;i++){
 					for(j=0;j<9;j++)
 						map[i][j]=out[i][j];}
-			}		
+					}
 		}
 
 	void Sudoku::flip(int n){
@@ -383,64 +374,16 @@ using namespace std;
 	}
 	void Sudoku::transform(){
 		readIn();
-//		printOut();
-//		cout<<endl;	
 		change();
-		printOut();
-
 	}
 
 	void Sudoku::change(){
 		srand(time(NULL));
-
-		int a1=rand()%9+1;
-		int a2=rand()%9+1;
-		if (a1==a2&&a2<9)
-			a2++;
-		else if(a1==a2&&a2==9)
-			a2--;
-//		changeNum(a1,a2);
-//		cout<<"change num"<<endl;
-//		cout<<"a="<<a1<<" "<<"b="<<a2<<endl;
-//		printOut();
-//		cout<<endl;
-
-		int a3=rand()%3;
-		int a4=rand()%3;
-		if(a3==a4&&a4!=2)
-			a4++;
-		else if(a3==a4&&a4==2)
-			a4--;
-//		changeRow(a3,a4);
-//		cout<<"change row"<<endl;
-//		cout<<"a="<<a3<<" "<<"b="<<a4<<endl;
-//		printOut();
-//		cout<<endl;
-
-		int a5=rand()%3;
-		int a6=rand()%3;
-		if(a5==a6&&a6!=2)
-			a6++;
-		else if(a5==a6&&a6==2)
-			a6--;
-//		changeCol(a5,a6);
-//		cout<<"change col"<<endl;
-//		cout<<"a="<<a5<<" "<<"b="<<a6<<endl;
-//		printOut();
-//		cout<<endl;
-	
-		int a7=rand()%101;
-		rotate(100);
-//		cout<<"rotate"<<endl;
-//		cout<<"n="<<a7<<endl;
-//		printOut();
-//		cout<<endl;
-		
-		int a8=rand()%2;
-//		flip(a8);
-//		cout<<"flip"<<endl;
-//		cout<<"n="<<a8<<endl;
-		
+		changeNum(rand()%9+1,rand()%9+1);
+		changeRow(rand()%3,rand()%3);
+		changeCol(rand()%3,rand()%3);
+		rotate(rand()%101);
+		flip(rand()%2);
 	}
 	void Sudoku::printOut(){
 		int i;
