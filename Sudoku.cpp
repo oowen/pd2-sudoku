@@ -36,15 +36,7 @@ using namespace std;
                                 if(!ss4[i])
                                         ss4[i]=10;}
 
-
-//              for(i=0;i<81;i++)
-//                      cout<<ss[i]<<" ";
-//                      cout<<endl;
-
-//              for(i=0;i<81;i++)
-//                      cout<<ss4[i];
-//                      cout<<endl;
-                        exam();
+                exam();
                 init();
                 tryans();
 				N=0;
@@ -150,20 +142,7 @@ using namespace std;
              for(i=0;i<81;i++){
                       if(ss2[i]==ss3[i])
                               N++;}
-  //                            for(i=0;i<81;i++)
-//                                      cout<<ss2[i];
-//                                      cout<<endl;
-//                              for(i=0;i<81;i++)
-//                                      cout<<ss3[i];
-//                                      cout<<endl;
-//                if(N!=81){
-//                        cout<<"2"<<endl;
-//                        exit(1);}
-//                else if(N==81)
-//                        cout<<"1"<<endl;
-//              else{
-//                      cout<<"0"<<endl;
-//                      exit(1);}
+
         }
 
         int Sudoku::check(int x){       //check row col block
@@ -411,17 +390,7 @@ using namespace std;
 //              printOut();
 //              cout<<endl;
                 change();
-//				N=0;
-//                for(i=0;i<81;i++){
- //                       ss2[i]=ss[i];
-//                        ss3[i]=ss4[i];
-///                        if(ss2[i]==ss3[i])
-//                                N++;}
-//				if(N!=81){
-//					cout<<"2"<<endl;
-//					exit(1);}
-////				else if(N==81)
-//					cout<<"1"<<endl;
+
                 printOut();
 
         }
@@ -498,21 +467,3 @@ using namespace std;
                                 map[i][j]=ss[i*9+j];
                 }
         }
-
-				
-				
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
